@@ -53,7 +53,8 @@
             android:layout_height="match_parent"
             android:text="Rename"
             android:textSize="13sp"
-            android:layout_marginEnd="5dp"/>
+            android:layout_marginEnd="5dp"
+            android:onClick="renameAlbum"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="match_parent"

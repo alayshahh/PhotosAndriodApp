@@ -27,6 +27,7 @@ import com.example.photos11.model.User;
 public class MainActivity extends AppCompatActivity {
     ListView listView;
     Context context = this;
+    int selected = -1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         }
         listView = findViewById(R.id.album_list);
         listView.setAdapter(new ArrayAdapter<Album>(this, R.layout.album_in_list, User.getInstance().getAlbums()));
+        listView.setOnItemClickListener((parent, view, position, id) -> selected = position);
     }
     public void addAlbum(View view){
         showAddItemDialog();
@@ -87,11 +89,60 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    private void showRenameItemDialog() {
+        Context c = this;
+        Log.i("Position", String.valueOf(selected));
+        Album album = User.getInstance().getAlbums().get(selected);
+        String name = album.toString();
+        Log.i("Album", String.valueOf(name));
+        final EditText taskEditText = new EditText(c);
+        taskEditText.setText(name);
+        AlertDialog dialog = new AlertDialog.Builder(c)
+                .setTitle("Rename album")
+                .setMessage("What is the album title")
+                .setView(taskEditText)
+                .setPositiveButton("Rename", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String task = String.valueOf(taskEditText.getText());
+                        if(task.isEmpty()){
+                            Toast.makeText(getApplicationContext(),"Invalid album name",Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        if(album.getName().equals(task)){
+                            return;
+                        }
+                        Album a = new Album(task);
+                        if(User.getInstance().contains(a)){
+                            Toast.makeText(getApplicationContext(),"Duplicate album name",Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        album.rename(task);
+                        Toast.makeText(getApplicationContext(),"Successfully Renamed",Toast.LENGTH_SHORT).show();
 
+                    }
+                })
+                .setNegativeButton("Cancel", null)
+                .create();
+        dialog.show();
+    }
 
     public void renameAlbum(View view){
+        Log.i("Selected Pos", String.valueOf(selected));
+        if(selected==-1||selected>=User.getInstance().getAlbums().size()){
+            return;
+        }
+
+        Album album = User.getInstance().getAlbums().get(selected);
+        String name = album.toString();
+        Log.i("Album", String.valueOf(name));
+        showRenameItemDialog();
+        listView.setAdapter(new ArrayAdapter<Album>(this, R.layout.album_in_list, User.getInstance().getAlbums()));
 
     }
+
+
+
     public void deleteAlbum(View view){
 
     }
