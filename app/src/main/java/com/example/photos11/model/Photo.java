@@ -1,4 +1,7 @@
 package com.example.photos11.model;
+/*
+@author Alay Shah
+ */
 
 import android.media.Image;
 import android.widget.ImageView;

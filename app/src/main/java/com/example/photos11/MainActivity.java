@@ -1,5 +1,7 @@
 package com.example.photos11;
-
+/*
+@author Alay Shah
+ */
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
@@ -15,9 +17,11 @@ import android.content.Context;
 import android.os.health.SystemHealthManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -56,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
     }
     public void addAlbum(View view){
         showAddItemDialog();
-        listView.setAdapter(new ArrayAdapter<Album>(this, R.layout.album_in_list, User.getInstance().getAlbums()));
+        //listView.setAdapter(new ArrayAdapter<Album>(this, R.layout.album_in_list, User.getInstance().getAlbums()));
     }
 
     private void showAddItemDialog() {
@@ -80,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
                             return;
                         }
                         User.getInstance().addAlbum(a);
+                        listView.invalidateViews();
                         Toast.makeText(getApplicationContext(),"Successfully Created",Toast.LENGTH_SHORT).show();
 
                     }
@@ -118,6 +123,12 @@ public class MainActivity extends AppCompatActivity {
                             return;
                         }
                         album.rename(task);
+                        try {
+                            User.getInstance().writeApp();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        listView.invalidateViews();
                         Toast.makeText(getApplicationContext(),"Successfully Renamed",Toast.LENGTH_SHORT).show();
 
                     }
@@ -137,16 +148,50 @@ public class MainActivity extends AppCompatActivity {
         String name = album.toString();
         Log.i("Album", String.valueOf(name));
         showRenameItemDialog();
-        listView.setAdapter(new ArrayAdapter<Album>(this, R.layout.album_in_list, User.getInstance().getAlbums()));
 
     }
-
 
 
     public void deleteAlbum(View view){
+        if(selected==-1||selected>=User.getInstance().getAlbums().size()){
+            return;
+        }
+        showDeleteItemDialog();
+        Log.i("DeleteDone", String.valueOf(selected));
+        for(Album a: User.getInstance().getAlbums()){
+            Log.i("CurrentAlbums", a.toString());
+        }
 
     }
+    private void showDeleteItemDialog(){
+        Album album = User.getInstance().getAlbums().get(selected);
+        AlertDialog dialog = new AlertDialog.Builder(context)
+                .setTitle("Delete album")
+                .setMessage("Are you sure you want to delete this album?")
+                .setPositiveButton("Delete", new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialog, int which){
+                        User.getInstance().removeAlbum(album);
+                        try {
+                            User.getInstance().writeApp();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        listView.invalidateViews();
+                    }
+
+                })
+                .setNegativeButton("Cancel", null)
+                .create();
+        dialog.show();
+
+    }
+
     public void showAlbum (View view){
+//        Bundle bundle = new Bundle();
+//        String open = User.getInstance().getAlbums().get(selected).toString();
+//        bundle.putString("Album",open);
+
 
     }
 

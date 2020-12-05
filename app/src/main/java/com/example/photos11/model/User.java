@@ -1,4 +1,7 @@
 package com.example.photos11.model;
+/*
+@author Alay Shah
+ */
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -27,11 +30,6 @@ public class User implements Serializable {
 
     public void removeAlbum(Album a){
         albums.remove(a);
-        try {
-            cur.writeApp();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
     public void addAlbum(Album a){
         albums.add(a);
