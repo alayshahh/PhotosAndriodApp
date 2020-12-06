@@ -25,7 +25,8 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="search"></Button>
+            android:text="search"
+            android:onClick="searchTag"></Button>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -39,8 +40,9 @@
             android:layout_height="match_parent"
             android:text="Open"
             android:textSize="13sp"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"/>
+            android:layout_marginStart="7dp"
+            android:layout_marginEnd="5dp"
+            android:onClick="showAlbum"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="match_parent"

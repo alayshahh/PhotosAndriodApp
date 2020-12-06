@@ -3,8 +3,12 @@ package com.example.photos11.model;
 @author Alay Shah
  */
 
+import android.net.Uri;
+
 import java.io.IOException;
 import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.net.URI;
 import java.util.ArrayList;
 
 public class Album implements Serializable {
@@ -33,6 +37,7 @@ public class Album implements Serializable {
         photos.add(me);
     }
 
+
     public void rename(String name) {
         this.name = name;
     }
@@ -59,6 +64,8 @@ public class Album implements Serializable {
         return photos.get(i);
 
     }
+
+
     public boolean equals(Object o) {
         if(!(o instanceof Album)||o==null){
             return false;
@@ -79,7 +86,7 @@ public class Album implements Serializable {
         return photos.get(photos.indexOf(p));
     }
 
-    public Photo getPhoto(String path){
+    public Photo getPhoto(Uri path){
         Photo p = new Photo(path);
         return getPhoto(p);
     }

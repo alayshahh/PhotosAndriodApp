@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".PhotoView"
+    android:layout_marginTop="?attr/actionBarSize"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp">
+        <Button
+            android:id="@+id/add_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Add"
+            android:layout_marginStart="40dp"
+            android:onClick="addPhoto"
+            />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Open"
+            android:layout_marginStart="20dp"/>
+        <Button
+            android:id="@+id/delete_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="delete"
+            android:layout_marginStart="20dp"
+            android:onClick="deletePhoto"
+            />
+    </LinearLayout>
+    <GridView
+        android:id="@+id/gridview"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:columnWidth="90dp"
+        android:numColumns="auto_fit"
+        android:verticalSpacing="10dp"
+        android:horizontalSpacing="10dp"
+        android:stretchMode="columnWidth"
+        android:gravity="center"
+        android:listSelector="@color/purple_200" />
+</LinearLayout>

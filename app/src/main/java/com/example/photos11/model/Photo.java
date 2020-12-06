@@ -3,12 +3,19 @@ package com.example.photos11.model;
 @author Alay Shah
  */
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.Image;
+import android.net.Uri;
 import android.widget.ImageView;
+
+import com.example.photos11.MainActivity;
 
 import java.io.File;
 import java.io.Serializable;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.util.ArrayList;
 
 public class Photo implements Serializable {
@@ -19,10 +26,13 @@ public class Photo implements Serializable {
     private ArrayList<String> people;
     private String location;
 
-    public Photo(String path){
-        this.path = path;
+    public Photo(Uri path){
+        this.path = path.toString();
         people = new ArrayList<String>();
         location = "";
+    }
+    public Uri getPath(){
+        return Uri.parse(path);
     }
 
     public boolean hasTag(String s){
@@ -34,7 +44,7 @@ public class Photo implements Serializable {
                 return true;
             }
         }
-        return true;
+        return false;
     }
     public void setLocation(String s){
         location = s;
@@ -55,6 +65,20 @@ public class Photo implements Serializable {
         }
         Photo p = (Photo) o;
         return p.path.equals(path);
+    }
+
+    public Bitmap getBitMap(Context c){
+        ImageView iv = getImageView(c);
+        BitmapDrawable bd = (BitmapDrawable) iv.getDrawable();
+        return bd.getBitmap();
+
+    }
+    public ImageView getImageView(Context c){
+        ImageView iv =  new ImageView(c);
+        iv.setImageURI(Uri.parse(path));
+        return iv;
+
+
     }
 
 

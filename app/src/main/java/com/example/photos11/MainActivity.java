@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
 import java.io.EOFException;
@@ -26,11 +27,14 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.photos11.model.Album;
+import com.example.photos11.model.Photo;
 import com.example.photos11.model.User;
 
 public class MainActivity extends AppCompatActivity {
     ListView listView;
     Context context = this;
+    EditText query;
+
     int selected = -1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         listView = findViewById(R.id.album_list);
         listView.setAdapter(new ArrayAdapter<Album>(this, R.layout.album_in_list, User.getInstance().getAlbums()));
         listView.setOnItemClickListener((parent, view, position, id) -> selected = position);
+        query = findViewById(R.id.search_tag);
     }
     public void addAlbum(View view){
         showAddItemDialog();
@@ -74,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String task = String.valueOf(taskEditText.getText());
+                        task=task.trim();
                         if(task.isEmpty()){
                             Toast.makeText(getApplicationContext(),"Invalid album name",Toast.LENGTH_SHORT).show();
                             return;
@@ -109,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
                 .setPositiveButton("Rename", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String task = String.valueOf(taskEditText.getText());
+                        String task = String.valueOf(taskEditText.getText()).trim();
                         if(task.isEmpty()){
                             Toast.makeText(getApplicationContext(),"Invalid album name",Toast.LENGTH_SHORT).show();
                             return;
@@ -188,14 +194,38 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void showAlbum (View view){
-//        Bundle bundle = new Bundle();
-//        String open = User.getInstance().getAlbums().get(selected).toString();
-//        bundle.putString("Album",open);
+        if(selected==-1||selected>=User.getInstance().getAlbums().size()){
+            return;
+        }
+        Log.i("METHOD", "showALBUM");
+        Bundle bundle = new Bundle();
+        String open = User.getInstance().getAlbums().get(selected).toString();
+        bundle.putString("Album",open);
+        Intent intent = new Intent(this, PhotoView.class);
+        intent.putExtras(bundle);
+        startActivity(intent);
 
 
     }
 
-
+    public void searchTag(View view){
+        String s = query.getText().toString();
+        if(s.trim().isEmpty()){
+            Toast.makeText(getApplicationContext(),"Invalid Tag",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        User.getInstance().searchTag(s);
+        Album res = User.getInstance().getResult();
+        if(res==null||res.getPhotos().size()==0){
+            Toast.makeText(getApplicationContext(),"No Results",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Bundle bundle = new Bundle();
+        bundle.putString("Album", " ");
+        Intent intent = new Intent(this, PhotoView.class);
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
 
 
 }

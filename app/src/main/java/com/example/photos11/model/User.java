@@ -18,6 +18,7 @@ public class User implements Serializable {
     static User cur = new User();
 
     private ArrayList<Album> albums = new ArrayList<>();
+    private transient Album result;
 
     private User(){ }
 
@@ -52,6 +53,24 @@ public class User implements Serializable {
         Album a = new Album(title);
         return getAlbum(a);
     }
+
+    public void searchTag(String s){
+        result = new Album(" ");
+        for(Album a: albums){
+            for(Photo p: a.getPhotos()){
+                if(!result.contains(p)){
+                    if(p.hasTag(s)){
+                        result.addPhoto(p);
+                    }
+                }
+            }
+
+        }
+    }
+    public Album getResult(){
+        return result;
+    }
+
 
     public void writeApp() throws IOException {
         ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(storeFile));
