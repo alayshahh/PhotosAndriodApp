@@ -1,5 +1,8 @@
 package com.example.photos11;
 
+/*
+@author Alay Shah
+ */
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;

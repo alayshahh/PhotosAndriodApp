@@ -1,5 +1,8 @@
 package com.example.photos11;
 
+/*
+@author Alay Shah
+ */
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
