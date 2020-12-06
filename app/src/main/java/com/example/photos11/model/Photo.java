@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.Image;
 import android.net.Uri;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.example.photos11.MainActivity;
@@ -35,6 +36,14 @@ public class Photo implements Serializable {
         return Uri.parse(path);
     }
 
+    public String getLocation() {
+        return location;
+    }
+
+    public ArrayList<String> getPeople(){
+        return people;
+    }
+
     public boolean hasTag(String s){
         if(location.contains(s)){
             return true;
@@ -57,6 +66,10 @@ public class Photo implements Serializable {
     }
     public void deletePerson(String s){
         people.remove(s);
+    }
+
+    public String toString(){
+        return path;
     }
 
     public boolean equals(Object o){

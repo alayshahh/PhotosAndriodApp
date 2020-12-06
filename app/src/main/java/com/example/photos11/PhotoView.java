@@ -1,6 +1,7 @@
 package com.example.photos11;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -24,6 +25,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -42,6 +44,7 @@ public class PhotoView extends AppCompatActivity {
     int selected = -1;
     Button add;
     Button delete;
+    Button move;
     //ImageView imageView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,11 +55,13 @@ public class PhotoView extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         add = findViewById(R.id.add_photo);
         delete = findViewById(R.id.delete_photo);
+        move = findViewById(R.id.move_photo);
         String alb = bundle.getString("Album");
         Log.i("Cur ALB", bundle.getString("Album"));
         if(alb.trim().isEmpty()){
             add.setVisibility(View.INVISIBLE);
             delete.setVisibility(View.INVISIBLE);
+            move.setVisibility(View.INVISIBLE);
             album = User.getInstance().getResult();
         }else{
             album = User.getInstance().getAlbum(new Album(alb));
@@ -137,6 +142,70 @@ public class PhotoView extends AppCompatActivity {
                 .setNegativeButton("Cancel", null)
                 .create();
         dialog.show();
+
+    }
+
+
+    public void movePhoto(View view){
+        if(selected==-1||selected>=album.getPhotos().size()){
+            return;
+        }
+        Photo p = album.getPhotos().get(selected);
+        Context c = this;
+        final EditText taskEditText = new EditText(c);
+        AlertDialog dialog = new AlertDialog.Builder(c)
+                .setTitle("Move to Album")
+                .setMessage("What is the album title")
+                .setView(taskEditText)
+                .setPositiveButton("Move", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String task = String.valueOf(taskEditText.getText());
+                        task=task.trim();
+                        if(task.isEmpty()){
+                            Toast.makeText(getApplicationContext(),"Invalid album name",Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        Album a = new Album(task);
+                        if(!User.getInstance().contains(a)){
+                            Toast.makeText(getApplicationContext(),"Invalid album name",Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                         a =  User.getInstance().getAlbum(a);
+                        if(a.contains(p)){
+                            Toast.makeText(getApplicationContext(),"Album already has image",Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        a.addPhoto(p);
+                        album.removePhoto(p);
+                        try {
+                            User.getInstance().writeApp();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        gridView.invalidateViews();
+                        Toast.makeText(getApplicationContext(),"Successfully Moved",Toast.LENGTH_SHORT).show();
+
+                    }
+                })
+                .setNegativeButton("Cancel", null)
+                .create();
+        dialog.show();
+
+    }
+
+    public void openPhoto(View view){
+        if(selected==-1||selected>=album.getPhotos().size()){
+            return;
+        }
+
+        Bundle bundle = new Bundle();
+        bundle.putString("Album", album.toString());
+        bundle.putString("Photo", album.getPhotos().get(selected).toString());
+        bundle.putInt("Selected", selected);
+        Intent intent = new Intent(this, PhotoDetailView.class);
+        intent.putExtras(bundle);
+        startActivity(intent);
 
     }
 

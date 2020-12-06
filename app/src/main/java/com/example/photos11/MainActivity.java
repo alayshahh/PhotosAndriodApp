@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         final EditText taskEditText = new EditText(c);
         AlertDialog dialog = new AlertDialog.Builder(c)
                 .setTitle("Add a new album")
-                .setMessage("What is the album title")
+                .setMessage("What is the album title?")
                 .setView(taskEditText)
                 .setPositiveButton("Add", new DialogInterface.OnClickListener() {
                     @Override

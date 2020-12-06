@@ -58,10 +58,8 @@ public class User implements Serializable {
         result = new Album(" ");
         for(Album a: albums){
             for(Photo p: a.getPhotos()){
-                if(!result.contains(p)){
-                    if(p.hasTag(s)){
-                        result.addPhoto(p);
-                    }
+                if(p.hasTag(s)) {
+                    result.addPhoto(p);
                 }
             }
 
